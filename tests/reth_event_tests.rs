@@ -186,9 +186,9 @@ async fn test_reth_subscribe_multiple_subscribers() {
 async fn test_reth_subscribe_server_survives_client_drop() {
     let (addr, _) = start_reth_server().await;
     let http_client = get_http_client(&addr);
-    let ws_client = get_ws_client(&addr).await;
+    let ws_client1 = get_ws_client(&addr).await;
 
-    let mut subscription = RethEntityApiClient::subscribe_events(&ws_client, None)
+    let mut subscription = RethEntityApiClient::subscribe_events(&ws_client1, None)
         .await
         .unwrap();
 
@@ -198,7 +198,7 @@ async fn test_reth_subscribe_server_survives_client_drop() {
     let _ = subscription.next().await.unwrap().unwrap();
 
     drop(subscription);
-    drop(ws_client);
+    drop(ws_client1);
 
     let ws_client2 = get_ws_client(&addr).await;
     let mut subscription2 = RethEntityApiClient::subscribe_events(&ws_client2, None)
