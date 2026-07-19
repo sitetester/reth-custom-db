@@ -35,8 +35,8 @@ impl MdbxDb {
         let mut cursor = tx.cursor_read::<EntityTable>()?;
 
         let mut result: Vec<(String, String)> = Vec::new();
+        // None would start from the first entry,
         for entry in cursor.walk(None)? {
-            // None would start from the first entry,
             let (key, value) = entry?;
             result.push((
                 String::from_utf8_lossy(&key.0).to_string(),
