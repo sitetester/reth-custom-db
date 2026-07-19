@@ -161,10 +161,10 @@ async fn test_reth_subscribe_no_matching_filter() {
 async fn test_reth_subscribe_multiple_subscribers() {
     let (addr, _) = start_reth_server().await;
     let http_client = get_http_client(&addr);
-    let ws_client = get_ws_client(&addr).await;
+    let ws_client1 = get_ws_client(&addr).await;
     let ws_client2 = get_ws_client(&addr).await;
 
-    let mut subscription1 = RethEntityApiClient::subscribe_events(&ws_client, None)
+    let mut subscription1 = RethEntityApiClient::subscribe_events(&ws_client1, None)
         .await
         .unwrap();
     let mut subscription2 = RethEntityApiClient::subscribe_events(&ws_client2, None)
