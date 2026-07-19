@@ -25,6 +25,8 @@ fn internal_error(msg: String) -> jsonrpsee::types::error::ErrorObject<'static> 
     jsonrpsee::types::error::ErrorObject::owned(-32000, msg, None::<()>)
 }
 
+/// Serializes an event to JSON and sends it to a subscription client.
+/// Returns `false` if serialization fails or the client disconnected.
 async fn try_send_event<T: Serialize>(sink: &SubscriptionSink, event: &T) -> bool {
     let raw = match serde_json::value::to_raw_value(event) {
         Ok(raw) => raw,
