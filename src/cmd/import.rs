@@ -3,6 +3,7 @@ use eyre::eyre;
 
 use crate::db::{DbType, SqliteDb};
 
+/// Imports SQLite or MDBX db from a JSON file
 #[derive(Parser, Debug)]
 pub struct DbImportCommand {
     #[arg(long, default_value_t = DbType::Sqlite)]
