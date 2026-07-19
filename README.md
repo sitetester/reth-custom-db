@@ -31,8 +31,7 @@ in `SqliteEntityApi` & `RethEntityApi` traits respectively.
 
 Now we have following RPC methods available:
 - [SQLite:](#sqlite-rpc-api) `sqlite_get`, `sqlite_save`, `sqlite_delete`, `sqlite_subscribeEvents`
-<a id="reth-rpc-methods"></a>
-- [Reth:](#reth-rpc-methods) `reth_get`, `reth_save`, `reth_delete`, `reth_subscribeEvents`, `reth_subscribeBlocks`
+- [Reth:](#reth-rpc-api) `reth_get`, `reth_save`, `reth_delete`, `reth_subscribeEvents`, `reth_subscribeBlocks`
 All of these methods follow standard [JSON-RPC 2.0 specs](https://www.jsonrpc.org/specification#response_object)
 
 ## SQLite RPC API
@@ -97,7 +96,7 @@ then send `sqlite_save` / `sqlite_delete` CURL requests (from above) in a new te
 {"jsonrpc":"2.0","method":"sqlite_subscribeEvents","params":{"subscription":"0x4dcb6aa3bb95e1d7e70dbae152468d69","result":{"event":"saved","key":"my_key","value":"new_value"}}}
 ```
 ## Reth RPC API
-Likewise, we could have similar [RPC methods](#reth-rpc-methods) & subscriptions for `reth_` namespace.  
+Likewise, we could have similar RPC methods & subscriptions for `reth_` namespace.  
 ![reth subscribe](./screenshots/reth_subscribeEvents_all.png)
 
 ### reth_subscribeBlocks
