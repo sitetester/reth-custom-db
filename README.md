@@ -139,7 +139,7 @@ Check Unit tests under `/src/cmd/export.rs` for verification.
 
 **MDBX:**  
 Need to stop running node first. Otherwise, it gives error like `storage directory is currently in use as read-write by another process`.
-To find reth data directory, we can check reth docs.
+To find reth data directory, check reth docs.
 ```bash
 find ~ -name "mdbx.dat" 2>/dev/null
 /Users/x/Library/Application Support/reth/mainnet/db/mdbx.dat
