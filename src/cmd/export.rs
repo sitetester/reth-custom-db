@@ -3,6 +3,7 @@ use eyre::eyre;
 
 use crate::db::{DbType, SqliteDb};
 
+/// `#[derive(Parser)]` auto-generates code to parse command-line arguments into our struct fields.
 #[derive(Parser, Debug)]
 pub struct DbExportCommand {
     #[arg(long, default_value_t = DbType::Sqlite)]
