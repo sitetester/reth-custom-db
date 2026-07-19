@@ -101,20 +101,36 @@ async fn test_reth_subscribe_all_keys() {
     RethEntityApiClient::save(&http_client, "k1".to_string(), "v1".to_string())
         .await
         .unwrap();
+    RethEntityApiClient::save(&http_client, "k1".to_string(), "v11".to_string())
+        .await
+        .unwrap();
     RethEntityApiClient::save(&http_client, "k2".to_string(), "v2".to_string())
         .await
         .unwrap();
-    RethEntityApiClient::save(&http_client, "k3".to_string(), "v3".to_string())
+
+    // CAUTION!
+    // it cau cause hang as `delete` returns Ok(false) when the key doesn't exist,
+    // so no event is broadcast & `subscription.next().await` waits forever.
+    RethEntityApiClient::delete(&http_client, "k2".to_string())
         .await
         .unwrap();
 
     let event1 = subscription.next().await.unwrap().unwrap();
     let event2 = subscription.next().await.unwrap().unwrap();
     let event3 = subscription.next().await.unwrap().unwrap();
+    let event4 = subscription.next().await.unwrap().unwrap();
 
     assert_eq!(event1.key, "k1");
-    assert_eq!(event2.key, "k2");
-    assert_eq!(event3.key, "k3");
+    assert_eq!(event2.key, "k1");
+    assert_eq!(event3.key, "k2");
+    assert_eq!(
+        event4,
+        EntityEvent {
+            event: EventType::Deleted,
+            key: "k2".into(),
+            value: None
+        }
+    );
 }
 
 #[tokio::test]
