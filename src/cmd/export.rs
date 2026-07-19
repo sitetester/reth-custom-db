@@ -100,7 +100,10 @@ mod tests {
         {
             let db_conn = crate::db::MdbxDb::open(db_path.to_str().unwrap()).unwrap();
             db_conn
-                .write_all(&[("key1".into(), "val1".into()), ("key2".into(), "val2".into())])
+                .write_all(&[
+                    ("key1".into(), "val1".into()),
+                    ("key2".into(), "val2".into()),
+                ])
                 .unwrap();
         }
 
