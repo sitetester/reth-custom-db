@@ -8,6 +8,8 @@ pub use mdbx::MdbxDb;
 pub use reth_table::{EntityKey, EntityTable, EntityValue, ensure_entity_table};
 pub use sqlite::SqliteDb;
 
+/// #[derive(clap::ValueEnum)] lets our enum be parsed from CLI string arguments.
+/// e.g., `--db-type sqlite` on the CLI becomes DbType::Sqlite in struct (check imports / exports)
 #[derive(Debug, Clone, clap::ValueEnum)]
 pub enum DbType {
     Sqlite,
