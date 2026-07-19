@@ -94,7 +94,7 @@ mod tests {
         {
             let db_conn = crate::db::MdbxDb::open(db_path.to_str().unwrap()).unwrap();
             db_conn
-                .write_all(&[("k1".into(), "v1".into()), ("k2".into(), "v2".into())])
+                .write_all(&[("key1".into(), "val1".into()), ("key2".into(), "val2".into())])
                 .unwrap();
         }
 
@@ -111,8 +111,8 @@ mod tests {
 
         assert_eq!(entries.len(), 2);
 
-        assert!(entries.contains(&("k1".into(), "v1".into())));
-        assert!(entries.contains(&("k2".into(), "v2".into())));
+        assert!(entries.contains(&("key1".into(), "val1".into())));
+        assert!(entries.contains(&("key2".into(), "val2".into())));
     }
 
     #[test]
