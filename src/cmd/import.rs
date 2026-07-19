@@ -57,16 +57,18 @@ mod tests {
     #[test]
     fn test_import_sqlite_roundtrip() {
         let dir = std::env::temp_dir();
-        let db_path = dir.join("test_import_sqlite.db");
-        let import_path = dir.join("import_sqlite.json");
-        std::fs::remove_file(&db_path).ok();
-
+        // step 1 - prepare JSON file
         let entries = vec![
-            ("a".to_string(), "1".to_string()),
-            ("b".to_string(), "2".to_string()),
+            ("key1".to_string(), "val1".to_string()),
+            ("key2".to_string(), "val2".to_string()),
         ];
+        let import_path = dir.join("import_sqlite.json");
         std::fs::write(&import_path, serde_json::to_string(&entries).unwrap()).unwrap();
 
+        // step 2 - import JSON
+        let db_path = dir.join("test_import_sqlite.db");
+        // let's start with a fresh db (data might persist from previous tests)
+        std::fs::remove_file(&db_path).ok();
         let cmd = DbImportCommand {
             db_type: DbType::Sqlite,
             conn_path: Some(db_path.to_str().unwrap().into()),
@@ -74,23 +76,26 @@ mod tests {
         };
         cmd.import().unwrap();
 
+        // step 3 - test
         let db_conn = SqliteDb::open(db_path.to_str().unwrap()).unwrap();
-        assert_eq!(db_conn.get("a").unwrap(), Some("1".into()));
-        assert_eq!(db_conn.get("b").unwrap(), Some("2".into()));
+        assert_eq!(db_conn.get("key1").unwrap(), Some("val1".into()));
+        assert_eq!(db_conn.get("key2").unwrap(), Some("val2".into()));
     }
 
     #[test]
     fn test_import_mdbx_roundtrip() {
         let dir = std::env::temp_dir();
-        let db_path = dir.join("test_import_mdbx_db");
-        let import_path = dir.join("import_mdbx.json");
 
+        // step 1 - prepare JSON file
         let entries = vec![
             ("x".to_string(), "10".to_string()),
             ("y".to_string(), "20".to_string()),
         ];
+        let import_path = dir.join("import_mdbx.json");
         std::fs::write(&import_path, serde_json::to_string(&entries).unwrap()).unwrap();
 
+        // step 2 - import JSON
+        let db_path = dir.join("test_import_mdbx_db");
         let cmd = DbImportCommand {
             db_type: DbType::Mdbx,
             conn_path: Some(db_path.to_str().unwrap().into()),
@@ -98,6 +103,7 @@ mod tests {
         };
         cmd.import().unwrap();
 
+        // step 3 - test
         let db_conn = crate::db::MdbxDb::open(db_path.to_str().unwrap()).unwrap();
         let results = db_conn.read_all().unwrap();
         assert_eq!(results.len(), 2);

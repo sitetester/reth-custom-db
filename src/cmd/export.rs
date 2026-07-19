@@ -10,10 +10,10 @@ pub struct DbExportCommand {
     #[arg(long, default_value_t = DbType::Sqlite)]
     pub db_type: DbType,
 
-    /// `#[arg(long)]` would cause
-    /// - `clap` to convert your Rust field name into kebab-case to create the command-line flag.
-    /// - By omitting it, the argument becomes positional. The user would have to type the values in
-    ///   a strict fields specific order
+    // `#[arg(long)]` would cause
+    // - `clap` to convert your Rust field name into kebab-case to create the command-line flag.
+    // - By omitting it, the argument becomes positional. The user would have to type the values in
+    //   a strict fields specific order
     #[arg(long)]
     pub conn_path: Option<String>,
 
@@ -61,7 +61,9 @@ mod tests {
     fn test_export_sqlite_roundtrip() {
         let temp_dir = std::env::temp_dir();
 
+        // step 1 - fill DB
         let db_path = temp_dir.join("test_export_sqlite.db");
+        // let's start with a fresh db (data might persist from previous tests)
         std::fs::remove_file(&db_path).ok();
         {
             let db_conn = SqliteDb::open(db_path.to_str().unwrap()).unwrap();
@@ -70,6 +72,7 @@ mod tests {
             // connection auto dropped here
         }
 
+        // step 2 - export as JSON
         let export_path = temp_dir.join("export_sqlite.json");
         let cmd = DbExportCommand {
             db_type: DbType::Sqlite,
@@ -78,11 +81,10 @@ mod tests {
         };
         cmd.export().unwrap();
 
+        // step 3 - test
         let json = std::fs::read_to_string(&export_path).unwrap();
         let entries: Vec<(String, String)> = serde_json::from_str(&json).unwrap();
-
         assert_eq!(entries.len(), 2);
-
         assert!(entries.contains(&("key1".into(), "val1".into())));
         assert!(entries.contains(&("key2".into(), "val2".into())));
     }
@@ -90,7 +92,10 @@ mod tests {
     #[test]
     fn test_export_mdbx_roundtrip() {
         let temp_dir = std::env::temp_dir();
+
+        // step 1 - fill DB
         let db_path = temp_dir.join("test_export_mdbx_db");
+        // let's start with a fresh db (data might persist from previous tests)
         std::fs::remove_dir_all(&db_path).ok();
         {
             let db_conn = crate::db::MdbxDb::open(db_path.to_str().unwrap()).unwrap();
@@ -99,6 +104,7 @@ mod tests {
                 .unwrap();
         }
 
+        // step 2 - export as JSON
         let export_path = temp_dir.join("export_mdbx.json");
         let cmd = DbExportCommand {
             db_type: DbType::Mdbx,
@@ -107,11 +113,10 @@ mod tests {
         };
         cmd.export().unwrap();
 
+        // step 3 - test
         let json = std::fs::read_to_string(&export_path).unwrap();
         let entries: Vec<(String, String)> = serde_json::from_str(&json).unwrap();
-
         assert_eq!(entries.len(), 2);
-
         assert!(entries.contains(&("key1".into(), "val1".into())));
         assert!(entries.contains(&("key2".into(), "val2".into())));
     }
