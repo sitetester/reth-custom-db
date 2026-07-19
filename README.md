@@ -108,7 +108,7 @@ Connected (press CTRL+C to quit)
 > {"jsonrpc":"2.0","id":1,"method":"reth_subscribeBlocks","params":[]}
 ```
 To see events, in another terminal make a call that triggers a block, or just wait if your node is synced 
-and producing blocks.
+and producing blocks. Check `test_reth_subscribe_blocks` in `tests/reth_event_tests.rs` for a working example.
 
 ### reth_unsubscribeBlocks
 Unsubscribes from block notifications.
