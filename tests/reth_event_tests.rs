@@ -41,9 +41,10 @@ async fn test_reth_subscribe_delete_event() {
     let http_client = get_http_client(&addr);
     let ws_client = get_ws_client(&addr).await;
 
-    let mut subscription = RethEntityApiClient::subscribe_events(&ws_client, None)
-        .await
-        .unwrap();
+    let mut subscription =
+        RethEntityApiClient::subscribe_events(&ws_client, Some("k1".to_string()))
+            .await
+            .unwrap();
 
     RethEntityApiClient::save(&http_client, "k1".to_string(), "v1".to_string())
         .await
