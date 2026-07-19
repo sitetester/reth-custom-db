@@ -96,7 +96,7 @@ then send `sqlite_save` / `sqlite_delete` CURL requests (from above) in a new te
 ```json
 {"jsonrpc":"2.0","method":"sqlite_subscribeEvents","params":{"subscription":"0x4dcb6aa3bb95e1d7e70dbae152468d69","result":{"event":"saved","key":"my_key","value":"new_value"}}}
 ```
-## Reth RPC & WebSocket APIs
+## Reth RPC APIs
 Likewise, we could have similar [RPC methods](#reth-rpc-methods) & subscriptions for `reth_` namespace.  
 ![reth subscribe](./screenshots/reth_subscribeEvents_all.png)
 
