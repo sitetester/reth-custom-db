@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 /// `Arc` provides shared ownership across tasks, while `Mutex` ensures only one
 /// task uses the `Connection` at a time (others wait). Without the `Mutex`,
 /// concurrent SQL access on the same `Connection` would cause data races
-/// (undefined behavior), since `Connection` is not `Sync`.
+/// (undefined behavior), since `Connection` is neither `Send` nor `Sync`.
 pub struct SqliteDb {
     conn: Mutex<rusqlite::Connection>,
 }
