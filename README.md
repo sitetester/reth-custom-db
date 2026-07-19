@@ -1,5 +1,5 @@
 It's a [Reth](https://github.com/paradigmxyz/reth) extension that adds a custom key-value entity store
-with two database backends ([SQLite](https://www.sqlite.org/) and [MDBX](https://github.com/Mithril-mine/libmdbx))
+with two database backends ([SQLite](https://www.sqlite.org/) & [MDBX](https://github.com/Mithril-mine/libmdbx))
 and exposes it via JSON-RPC over HTTP and WebSocket as JSON-RPC can work for both transport layers.
 
 
@@ -19,7 +19,7 @@ The `node` is a subcommand, not a flag, hence a space`-- node`, while no space n
 - `cargo run -- node --http --ws`
   - - with default SQLite db of `entity.db` (check `struct CustomArgs`)
   - - with Reth's own chain database (MDBX) 
-- `cargo run -- node --db-path /path/to/db` with custom SQLite path.
+- `cargo run -- node --db-path /path/to/db` with custom SQLite path.  
 Check logs for entries like
 ```
 2026-07-18T18:01:32.292997Z  INFO reth::cli: RPC HTTP server started url=127.0.0.1:8545
@@ -27,17 +27,16 @@ Check logs for entries like
 ```
 Thus Reth's JSON-RPC server started on `http://127.0.0.1:8545` (default) with the custom entity APIs enabled, 
 by registering `sqlite_*` and `reth_*` RPC namespaces based on `namespace = "sqlite"`, `namespace = "reth"`
-in `SqliteEntityApi` & `RethEntityApi` traits respectively. `-- node` is reth's built-in subcommand.
+in `SqliteEntityApi` & `RethEntityApi` traits respectively.
 
 Now we have following RPC methods available:
 - [SQLite:](#sqlite-rpc-api) `sqlite_get`, `sqlite_save`, `sqlite_delete`, `sqlite_subscribeEvents`
 <a id="reth-rpc-methods"></a>
 - [Reth:](#reth-rpc-api) `reth_get`, `reth_save`, `reth_delete`, `reth_subscribeEvents`, `reth_subscribeBlocks`
-
+All of these methods follow standard [JSON-RPC 2.0 specs](https://www.jsonrpc.org/specification#response_object)
 
 ## SQLite RPC API
 - sqlite_save - Saves an entity.  
-"result":null` is standard JSON-RPC 2.0 spec Success response.
 ```bash
 curl -X POST http://127.0.0.1:8545 \
   -H 'Content-Type: application/json' \
