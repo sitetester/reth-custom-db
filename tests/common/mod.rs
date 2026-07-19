@@ -47,7 +47,6 @@ pub async fn get_ws_client(addr: &SocketAddr) -> Client {
 pub async fn start_reth_server() -> (SocketAddr, tokio::sync::broadcast::Sender<BlockEvent>) {
     let id = DB_COUNTER.fetch_add(1, Ordering::SeqCst);
     let db_path = std::env::temp_dir().join(format!("reth_test_{}", id));
-
     let _ = std::fs::remove_dir_all(&db_path);
     let db_conn = MdbxDb::open(db_path.to_str().unwrap()).unwrap();
 
