@@ -36,8 +36,6 @@ pub trait SqliteEntityApi {
     ///
     /// ```json
     /// {"jsonrpc": "2.0", "id": 1, "method": "sqlite_subscribeEvents", "params": ["my_key"]}
-    ///
-    /// {"jsonrpc": "2.0", "method": "sqlite_subscribeEvents", "params": {"subscription": 0, "result": {"event": "saved", "key": "my_key", "value": "new_value"}}}
     /// ```
     ///
     /// `params` can be empty to subscribe to all events:
