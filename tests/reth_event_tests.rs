@@ -49,12 +49,12 @@ async fn test_reth_subscribe_delete_event() {
     RethEntityApiClient::save(&http_client, "k1".to_string(), "v1".to_string())
         .await
         .unwrap();
-    let _ = subscription.next().await.unwrap().unwrap(); // consume save event
 
     RethEntityApiClient::delete(&http_client, "k1".to_string())
         .await
         .unwrap();
 
+    let _ = subscription.next().await.unwrap().unwrap(); // consume save event
     let event = subscription.next().await.unwrap().unwrap();
     assert_eq!(
         event,
