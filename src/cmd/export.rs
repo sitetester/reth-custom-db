@@ -9,6 +9,10 @@ pub struct DbExportCommand {
     #[arg(long, default_value_t = DbType::Sqlite)]
     pub db_type: DbType,
 
+    /// `#[arg(long)]` would cause
+    /// - `clap` to convert your Rust field name into kebab-case to create the command-line flag.
+    /// - By omitting it, the argument becomes positional. The user would have to type the values in
+    ///   a strict fields specific order
     #[arg(long)]
     pub conn_path: Option<String>,
 
