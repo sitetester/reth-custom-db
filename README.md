@@ -103,7 +103,7 @@ Likewise we could have similar [RPC methods](#reth-rpc-methods) & subscriptionns
 
 ### reth_subscribeBlocks
 Subscribes to new block notifications.
-```json
+```bash
 wscat -c ws://127.0.0.1:8546           
 Connected (press CTRL+C to quit)
 > {"jsonrpc":"2.0","id":1,"method":"reth_subscribeBlocks","params":[]}
@@ -113,7 +113,7 @@ and producing blocks.
 
 ### reth_unsubscribeBlocks
 Unsubscribes from block notifications.
-```json
+```bash
 wscat -c ws://127.0.0.1:8546           
 Connected (press CTRL+C to quit)
 > {"jsonrpc":"2.0","id":1,"method":"reth_subscribeBlocks","params":[]}
