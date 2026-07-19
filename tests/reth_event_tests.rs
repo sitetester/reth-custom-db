@@ -188,16 +188,16 @@ async fn test_reth_subscribe_server_survives_client_drop() {
     let http_client = get_http_client(&addr);
     let ws_client1 = get_ws_client(&addr).await;
 
-    let mut subscription = RethEntityApiClient::subscribe_events(&ws_client1, None)
+    let mut subscription1 = RethEntityApiClient::subscribe_events(&ws_client1, None)
         .await
         .unwrap();
 
     RethEntityApiClient::save(&http_client, "k1".to_string(), "v1".to_string())
         .await
         .unwrap();
-    let _ = subscription.next().await.unwrap().unwrap();
+    let _ = subscription1.next().await.unwrap().unwrap();
 
-    drop(subscription);
+    drop(subscription1);
     drop(ws_client1);
 
     let ws_client2 = get_ws_client(&addr).await;
