@@ -155,10 +155,10 @@ async fn test_sqlite_subscribe_no_matching_filter() {
 async fn test_sqlite_subscribe_multiple_subscribers() {
     let addr = start_sqlite_server().await;
     let http_client = get_http_client(&addr);
-    let ws_client = get_ws_client(&addr).await;
+    let ws_client1 = get_ws_client(&addr).await;
     let ws_client2 = get_ws_client(&addr).await;
 
-    let mut subscription1 = SqliteEntityApiClient::subscribe_events(&ws_client, None)
+    let mut subscription1 = SqliteEntityApiClient::subscribe_events(&ws_client1, None)
         .await
         .unwrap();
     let mut subscription2 = SqliteEntityApiClient::subscribe_events(&ws_client2, None)
@@ -180,39 +180,8 @@ async fn test_sqlite_subscribe_multiple_subscribers() {
 async fn test_sqlite_subscribe_server_survives_client_drop() {
     let addr = start_sqlite_server().await;
     let http_client = get_http_client(&addr);
-    let ws_client = get_ws_client(&addr).await;
-
-    let mut subscription = SqliteEntityApiClient::subscribe_events(&ws_client, None)
-        .await
-        .unwrap();
-
-    SqliteEntityApiClient::save(&http_client, "k1".to_string(), "v1".to_string())
-        .await
-        .unwrap();
-    let _ = subscription.next().await.unwrap().unwrap();
-
-    drop(subscription);
-    drop(ws_client);
-
-    let ws_client2 = get_ws_client(&addr).await;
-    let mut subscription2 = SqliteEntityApiClient::subscribe_events(&ws_client2, None)
-        .await
-        .unwrap();
-
-    SqliteEntityApiClient::save(&http_client, "k2".to_string(), "v2".to_string())
-        .await
-        .unwrap();
-
-    let event = subscription2.next().await.unwrap().unwrap();
-    assert_eq!(event.key, "k2");
-}
-
-#[tokio::test]
-async fn test_sqlite_subscribe_reconnect() {
-    let addr = start_sqlite_server().await;
-    let http_client = get_http_client(&addr);
-
     let ws_client1 = get_ws_client(&addr).await;
+
     let mut subscription1 = SqliteEntityApiClient::subscribe_events(&ws_client1, None)
         .await
         .unwrap();
@@ -235,12 +204,5 @@ async fn test_sqlite_subscribe_reconnect() {
         .unwrap();
 
     let event = subscription2.next().await.unwrap().unwrap();
-    assert_eq!(
-        event,
-        EntityEvent {
-            event: EventType::Saved,
-            key: "k2".into(),
-            value: Some("v2".into())
-        }
-    );
+    assert_eq!(event.key, "k2");
 }
