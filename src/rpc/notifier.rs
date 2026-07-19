@@ -2,6 +2,7 @@ use tokio::sync::broadcast;
 
 use crate::db::EntityEvent;
 
+/// Broadcasts entity events (saved/deleted) to WebSocket subscribers.
 pub struct EntityEventNotifier {
     tx: broadcast::Sender<EntityEvent>,
 }
