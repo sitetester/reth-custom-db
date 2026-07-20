@@ -100,7 +100,7 @@ Likewise, we could have similar RPC methods & subscriptions for `reth_` namespac
 ![reth subscribe](./screenshots/reth_subscribeEvents_all.png)
 
 ### reth_subscribeBlocks
-Subscribes to new block notifications.
+Subscribes to new block notifications. 
 ```bash
 wscat -c ws://127.0.0.1:8546           
 Connected (press CTRL+C to quit)
@@ -108,6 +108,8 @@ Connected (press CTRL+C to quit)
 ```
 To see events, in another terminal make a call that triggers a block, or just wait if your node is synced 
 and producing blocks. Check `test_reth_subscribe_blocks` in `tests/reth_event_tests.rs` for a working example.
+This event is interesting in scenarios where some external listeners to the node perform certain action 
+based on this event, as block has now been fully finalised by the chain.
 
 ### reth_unsubscribeBlocks
 Unsubscribes from block notifications.
